@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from decouple import config
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,10 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0+bbdb)!wd9_js1e5w(_4i8+*sz7@_w0f%lg7y16b4(50$*_&r'
+SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = str(os.environ.get("DJANGO_DEBUG")).lower() == "true"
+DEBUG = config("DJANGO_DEBUG", cast=bool)
 
 ALLOWED_HOSTS = [
     ".railway.app"
@@ -122,11 +123,32 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+# https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
+STATICFILES_BASE_DIR = BASE_DIR / "staticfiles"
+STATICFILES_BASE_DIR.mkdir(exist_ok=True, parents=True)
+STATICFILES_VENDOR_DIR = STATICFILES_BASE_DIR / "vendors"
+
+# source(s) for python manage.py collectstatic
+STATICFILES_DIRS = [
+    STATICFILES_BASE_DIR
+]
+
+# output for python manage.py collectstatic
+# local cdn
+STATIC_ROOT = BASE_DIR / "local-cdn"
+
+# < Django 4.2
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
