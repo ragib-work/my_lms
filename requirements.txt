@@ -5,3 +5,11 @@ packaging==24.2
 python-decouple==3.8
 sqlparse==0.5.3
 tzdata==2024.2
+psycopg[binary]
+dj-database-url
+requests
+whitenoise
+django-allauth[socialaccount]
+django-allauth-ui
+django-widget-tweaks
+stripe
