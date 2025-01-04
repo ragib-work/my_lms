@@ -55,6 +55,10 @@ ENV DJANGO_DEBUG=${DJANGO_DEBUG}
 RUN python manage.py vendor_pull
 RUN python manage.py collectstatic --noinput
 # whitenoise -> s3
+# Set WhiteNoise configurations
+ENV STATICFILES_STORAGE=whitenoise.storage.CompressedManifestStaticFilesStorage
+ENV WHITENOISE_SKIP_COMPRESS_EXTENSIONS=js.map,css.map
+
 
 # set the Django default project name
 ARG PROJ_NAME="academy"
