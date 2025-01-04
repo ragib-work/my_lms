@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'base/meta.html' %}
+    <title>{% block head_title %}My Academy{% endblock head_title %}</title>
+    {% include 'base/css.html' %}
+</head>
+<body>
+    {% include 'nav/navbar.html' %}
+    {% block content %}
+
+    {% endblock content %}
+
+    {% include 'base/js.html' %}
+</body>
+</html>
