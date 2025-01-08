@@ -12,6 +12,7 @@ gunicorn==23.0.0
 idna==3.10
 oauthlib==3.2.2
 packaging==24.2
+pillow==11.1.0
 psycopg==3.2.3
 psycopg-binary==3.2.3
 pycparser==2.22
@@ -28,3 +29,4 @@ typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.3.0
 whitenoise==6.8.2
+cloudinary

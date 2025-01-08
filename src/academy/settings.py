@@ -14,8 +14,21 @@ from email.policy import default
 from decouple import config
 from pathlib import Path
 
+from django.conf.global_settings import MEDIA_ROOT
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOCAL_CDN = BASE_DIR.parent / "local_cdn"
+MEDIA_ROOT = LOCAL_CDN / "media"
+
+# Email config
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = config("EMAIL_HOST", cast=str, default="smtp.gmail.com")
+EMAIL_PORT = config("EMAIL_PORT", cast=str, default="587") # Recommended
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", cast=str, default=None)
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", cast=str, default=None)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=True)  # Use EMAIL_PORT 587 for TLS
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=False)  # Use MAIL_PORT 465 for SSL
 
 
 # Quick-start development settings - unsuitable for production
@@ -50,6 +63,7 @@ INSTALLED_APPS = [
 
     # my-apps
     'commando',
+    'apps.courses',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +160,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+# Add these settings to handle media files
+MEDIA_URL = 'media/'
+MEDIA_ROOT = LOCAL_CDN / "media"
+
+
 STATICFILES_BASE_DIR = BASE_DIR / "staticfiles"
 STATICFILES_BASE_DIR.mkdir(exist_ok=True, parents=True)
 STATICFILES_VENDOR_DIR = STATICFILES_BASE_DIR / "vendors"
@@ -163,6 +182,9 @@ STATIC_ROOT = BASE_DIR / "local-cdn"
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STORAGES = {
+    "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
